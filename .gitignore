@@ -1,2 +1,6 @@
 .idea
 .phalcon
+composer.lock
+vendor
+var/cache
+var/log
