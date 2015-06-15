@@ -9,6 +9,7 @@
 namespace App\Hooks;
 
 
+use App\Util\U;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Exception;
@@ -109,11 +110,17 @@ class ModuleRouter implements InjectionAwareInterface{
 			$oLogger->debug(__CLASS__ . ': ' . $oRequest->getURI() . ' leads to module: ' . $strModuleName);
 		}else{
 
-			$strMsg = 'failed to load phalcon module';
+			if(U::isLegacy()){
+				require_once __DIR__ . '/../../legacy/public/index.php';
+//				die();
+			}else{
 
-			$oLogger->debug(__CLASS__ . ': ' . $strMsg . ' for "' . $oRequest->getUri() . '"');
+				$strMsg = 'failed to load phalcon module';
+
+				$oLogger->debug(__CLASS__ . ': ' . $strMsg . ' for "' . $oRequest->getUri() . '"');
 
 //			throw new Exception($strMsg);
+			}
 		}
 
 		return $boolReturn;

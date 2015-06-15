@@ -36,7 +36,12 @@ $di->set('config', function(){
 			'testDir' => __DIR__ . '/../../test/',
 			'modulesDir' => __DIR__ . '/../../app/modules',
 			'hooksDir' => __DIR__ . '/../../app/hooks',
-		)
+			'utilDir' => __DIR__ . '/../../app/util',
+		),
+		'environment' => array(
+			'legacy' => true,
+			'development' => true,
+		),
 	));
 
 }, true);

@@ -19,6 +19,7 @@ $di->set('loader', function() use ($oEventsManager, $di){
 	$oLoader->registerNamespaces(array(
 		'App\Modules' => $oConfig->application->modulesDir,
 		'App\Hooks' => $oConfig->application->hooksDir,
+		'App\Util' => $oConfig->application->utilDir,
 
 	));
 
