@@ -1,0 +1,3 @@
+[submodule "legacy"]
+	path = legacy
+	url = ssh://git@jira.abboom.world:7999/ab/abboom.git
