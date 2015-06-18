@@ -56,7 +56,12 @@ $dispatcherEventsManager->attach('dispatch', function($event, $dispatcher) use($
 });
 
 $dispatcherEventsManager->attach('dispatch:beforeException', function(Event $event, MvcDispatcher $dispatcher, $some) use($oLogger){
-	$oLogger->debug('common dispatcher: ' . $event->getType() . ': ' . print_r($some, true));
+	$oLogger->debug('common dispatcher: '
+		. 'module: "' . $dispatcher->getModuleName() . '";'
+		. ' controller: "' . $dispatcher->getControllerClass() . '";'
+		. ' action: "' . $dispatcher->getActionName() . '";'
+		. ' parameters: ' . print_r($dispatcher->getParams(), true));
+//	$oLogger->debug('common dispatcher: ' . $event->getType() . ': ' . print_r($some, true));
 });
 
 //$dispatcher->setEventsManager($dispatcherEventsManager);

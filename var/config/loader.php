@@ -13,7 +13,7 @@ $di->set('loader', function() use ($oEventsManager, $di){
 
 	$oConfig = $di->getConfig();
 
-	echo 'attaching events manager <br />' . PHP_EOL;
+//	echo 'attaching events manager <br />' . PHP_EOL;
 
 	$oLoader->setEventsManager($oEventsManager);
 	$oLoader->registerNamespaces(array(

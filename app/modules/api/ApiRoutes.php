@@ -50,7 +50,7 @@ class ApiRoutes extends Group{
 		$this->setPrefix('/api');
 
 		$this->add('/web/v{major:[0-9]{1,2}}.{minor:[0-9]{1,2}}/:controller/:action/:params', array(
-			'controller' => 3,
+			'controller' => 2,
 			'action' => 4,
 			'params' => 5,
 		));
@@ -67,6 +67,7 @@ class ApiRoutes extends Group{
 		{
 			$oLogger->debug(__CLASS__ . ': routes: ' . $uri . $route);
 		});
+
 	}
 
 }

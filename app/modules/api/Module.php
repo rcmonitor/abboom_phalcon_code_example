@@ -46,7 +46,6 @@ class Module implements ModuleDefinitionInterface {
 			array(
 				'App\Modules\Api\Controllers' => __DIR__ . '/controllers/',
 				'App\Modules\Api' => __DIR__,
-//				'Regular\Models'      => '../apps/backend/models/',
 			),
 			true
 		);

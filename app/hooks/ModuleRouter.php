@@ -18,13 +18,13 @@ use Phalcon\Logger\Adapter\File;
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Router;
 
-class ModuleRouter implements InjectionAwareInterface{
+class ModuleRouter{
 
 
 	/**
 	 * @var \DiCustom
 	 */
-	protected $_di;
+	protected $di;
 
 
 	private $app;
@@ -37,7 +37,7 @@ class ModuleRouter implements InjectionAwareInterface{
 
 		$this->app = $app;
 
-		$this->_di = $app->di;
+		$this->di = $app->di;
 
 		$this->knownModules = array(
 			'regular' => array(
@@ -56,14 +56,16 @@ class ModuleRouter implements InjectionAwareInterface{
 	}
 
 
-	public function setDi(DiInterface $di){
-		$this->_di = $di;
-	}
-
-
-	public function getDi(){
-		return $this->_di;
-	}
+//	public function setDi(DiInterface $di){
+//		$this->di = $di;
+//
+//		$this->app = $this->di->getApplication();
+//	}
+//
+//
+//	public function getDi(){
+//		return $this->di;
+//	}
 
 
 	/**
@@ -76,7 +78,7 @@ class ModuleRouter implements InjectionAwareInterface{
 
 		$boolReturn = false;
 
-		$oLogger = $this->_di->getFileLogger();
+		$oLogger = $this->di->getFileLogger();
 
 		$oPreRouter = new Router();
 
@@ -98,7 +100,7 @@ class ModuleRouter implements InjectionAwareInterface{
 		/**
 		 * @type Request $oRequest
 		 */
-		$oRequest = $this->_di->getRequest();
+		$oRequest = $this->di->getRequest();
 
 		if(array_key_exists($strModuleName, $this->knownModules)){
 			$this->app->registerModules(array(
