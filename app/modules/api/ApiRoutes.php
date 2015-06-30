@@ -13,6 +13,7 @@ use Phalcon\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Router\Group;
+use Phalcon\Mvc\Router\Route;
 
 class ApiRoutes extends Group{
 
@@ -23,49 +24,36 @@ class ApiRoutes extends Group{
 	private $di;
 
 
-//	public function __construct(DiInterface $di){
-//		$this->di = $di;
-//	}
-
-
-//	/**
-//	 * @var \DiCustom
-//	 */
-//	protected $_di;
-//
-//	public function setDi(DiInterface $di){
-//		$this->_di = $di;
-//	}
-//
-//
-//	public function getDi(){
-//		return $this->_di;
-//	}
 
 	public function initialize(){
 		$this->setPaths(array(
-			'module' => 'api'
+			'module' => 'api',
+			'namespace' => 'App\Modules\Api'
 		));
 
 		$this->setPrefix('/api');
 
-		$this->add('/web/v{major:[0-9]{1,2}}.{minor:[0-9]{1,2}}/:controller/:action/:params', array(
-			'controller' => 2,
-			'action' => 4,
-			'params' => 5,
-		));
+		$this->add('/{media}/v{major:[0-9]{1,2}}\.{minor:[0-9]{1,2}}/:controller/:action/:int', array(
+			'controller' => 4,
+			'action' => 5,
+			'id' => 6
+		))->setName('media_syntax_version_action_controller_id');
 
 
 		$di = Di::getDefault();
+
 		$oLogger = $di->getFileLogger();
-//		$oLogger = $this->di->getFileLogger();
 
 		$oLogger->debug(__CLASS__ . '::' . __FUNCTION__ . ': route added');
 
-		$this->beforeMatch(function($uri, $route)
-		use ($oLogger)
-		{
-			$oLogger->debug(__CLASS__ . ': routes: ' . $uri . $route);
+		$this->beforeMatch(function($uri, $route) use ($oLogger) {
+
+			/**
+			 * @type Route $route
+			 */
+			$oLogger->debug(__CLASS__ . ': before match: routes: ' . $uri . ': ' . $route->getName() . ': ' . $route->getPattern());
+
+			return true;
 		});
 
 	}

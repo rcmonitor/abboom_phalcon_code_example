@@ -1,6 +1,10 @@
 <?php
 
+require __DIR__ . '/../var/config/DiCustom.php';
+
 use App\Hooks\ModuleRouter;
+use Phalcon\Debug;
+use Phalcon\Di;
 use Phalcon\Events\Manager;
 use Phalcon\Http\Request;
 use Phalcon\Mvc\Application;
@@ -9,11 +13,16 @@ use Phalcon\Mvc\Router;
 error_reporting(E_ALL);
 
 try {
+	$di = new DiCustom();
+
+	Di::setDefault($di);
 
 	/**
 	 * Read common configuration
 	 */
-	$config = include __DIR__ . "/../var/config/config.php";
+	$oConfig = include __DIR__ . "/../var/config/config.php";
+
+	$di->setShared('config', $oConfig);
 
 	/**
 	 * Read common auto-loader
@@ -27,26 +36,15 @@ try {
 
 	$oLogger = $di->getFileLogger();
 
-	$strVendorLoaderPath = $config->application->libraryDir . '/autoload.php';
+	$strVendorLoaderPath = $oConfig->application->libraryDir . '/autoload.php';
 	require_once $strVendorLoaderPath;
 
-
-
-
 	$oAppEventsManager = new Manager();
-
-
 
 	/**
 	 * Handle the request
 	 */
 	$application = new \Phalcon\Mvc\Application($di);
-
-//	echo 'application created <br />';
-//
-//	$di->setShared('application', $application);
-//
-//	echo 'added to di container <br />';
 
 	$application->setEventsManager($oAppEventsManager);
 
@@ -54,20 +52,22 @@ try {
 		$oLogger->debug('application: ' . $event->getType());
 	});
 
-//	echo 'event manager attached <br />';
-
 	$arNamespaces = $di->getLoader()->getNamespaces();
-//	var_dump($arNamespaces);
 
+	/**
+	 * here's all the magic with modules
+	 */
 	$oModuleRouter = new ModuleRouter($application);
 
-//	$di->set('moduleRouter', $oModuleRouter);
-
 	if($oModuleRouter->handle()){
+
+		$oLogger->debug('app modules registered: ' . print_r($application->getModules(), true));
+		$oLogger->debug('app default module: "' . $application->getDefaultModule() . '"');
+
 		echo $application->handle()->getContent();
 	}else{
 //		running old application
-
+		require_once __DIR__ . '/../legacy/public/index.php';
 	}
 
 } catch (\Exception $e) {
@@ -83,6 +83,7 @@ try {
 		echo '<p><b>' . $offset . ':</b> ' . print_r($line, true) . '</p>';
 	}
 
+	$oLogger->error($e->getLine() . ':' . $e->getFile() . ':' . get_class($e) . ' "' . $e->getMessage() . '"');
 }
 
 

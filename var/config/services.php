@@ -1,5 +1,7 @@
 <?php
 
+require_once 'CommonDispatcher.php';
+
 use App\Hooks\PreControllerBase;
 use Phalcon\Di\FactoryDefault;
 //use Phalcon\Mvc\View;
@@ -16,53 +18,48 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 
 //$di = new FactoryDefault();
 
-$config = $di->get('config');
+$di = Phalcon\Di::getDefault();
 
+$config = $di->getConfig();
 
 /**
  * set up file logger
  */
-$di->set('fileLogger', function() use ($config) {
-	return new FileLogger($config->application->logDir . 'app.log');
-}, true);
+$oLogger = new FileLogger($config->application->logDir . 'app.log');
+$di->setShared('fileLogger', $oLogger);
 
 
-/**
- * @type Phalcon\Logger\Adapter\File\ $oLogger
- */
-$oLogger = $di->getFileLogger();
-
-$dispatcherEventsManager = new EventsManager();
-
-$di->set('dispatcher', function() use($dispatcherEventsManager){
-
-	$dispatcher = new MvcDispatcher();
-	$dispatcher->setEventsManager($dispatcherEventsManager);
-	return $dispatcher;
-});
-
-
-
-$dispatcherEventsManager->attach("dispatch:beforeExecuteRoute", function(Event $event, MvcDispatcher $dispatcher) use ($di) {
-
-	$oPreController = new PreControllerBase($di);
-	$oPreController->handle($event, $dispatcher);
-});
-
-
-$dispatcherEventsManager->attach('dispatch', function($event, $dispatcher) use($oLogger){
-//	$oLogger = $di->get('fileLogger');
-	$oLogger->debug('common dispatcher: ' . $event->getType());
-});
-
-$dispatcherEventsManager->attach('dispatch:beforeException', function(Event $event, MvcDispatcher $dispatcher, $some) use($oLogger){
-	$oLogger->debug('common dispatcher: '
-		. 'module: "' . $dispatcher->getModuleName() . '";'
-		. ' controller: "' . $dispatcher->getControllerClass() . '";'
-		. ' action: "' . $dispatcher->getActionName() . '";'
-		. ' parameters: ' . print_r($dispatcher->getParams(), true));
-//	$oLogger->debug('common dispatcher: ' . $event->getType() . ': ' . print_r($some, true));
-});
+//$dispatcherEventsManager = new EventsManager();
+//
+//$di->setShared('dispatcher', function() use($dispatcherEventsManager){
+//
+//	$dispatcher = new CommonDispatcher();
+//	$dispatcher->setEventsManager($dispatcherEventsManager);
+//	return $dispatcher;
+//});
+//
+//
+//
+//$dispatcherEventsManager->attach("dispatch:beforeExecuteRoute", function(Event $event, MvcDispatcher $dispatcher) use ($di) {
+//
+//	$oPreController = new PreControllerBase($di);
+//	$oPreController->handle($event, $dispatcher);
+//});
+//
+//
+//$dispatcherEventsManager->attach('dispatch', function($event, $dispatcher) use($oLogger){
+////	$oLogger = $di->get('fileLogger');
+//	$oLogger->debug('common dispatcher: ' . $event->getType());
+//});
+//
+//$dispatcherEventsManager->attach('dispatch:beforeException', function(Event $event, MvcDispatcher $dispatcher, $some) use($oLogger){
+//	$oLogger->debug('common dispatcher: '
+//		. 'module: "' . $dispatcher->getModuleName() . '";'
+//		. ' controller: "' . $dispatcher->getControllerClass() . '";'
+//		. ' action: "' . $dispatcher->getActionName() . '";'
+//		. ' parameters: ' . print_r($dispatcher->getParams(), true));
+////	$oLogger->debug('common dispatcher: ' . $event->getType() . ': ' . print_r($some, true));
+//});
 
 //$dispatcher->setEventsManager($dispatcherEventsManager);
 

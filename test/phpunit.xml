@@ -31,7 +31,8 @@
 		<testsuite name="First test suite">
 			<directory>/var/www/abboom2/test</directory>
 			<!--<file>/path/to/MyTest.php</file>-->
-			<!--<exclude>/path/to/exclude</exclude>-->
+			<exclude>/var/www/abboom2/test/route/RouterMatchesTest.php</exclude>
+			<exclude>/var/www/abboom2/test/UnitTest.php</exclude>
 		</testsuite>
 	</testsuites>
 

@@ -107,22 +107,18 @@ class ModuleRouter{
 				$strModuleName => $this->knownModules[$strModuleName],
 			));
 
+			$this->app->setDefaultModule($strModuleName);
+
 			$boolReturn = true;
 
 			$oLogger->debug(__CLASS__ . ': ' . $oRequest->getURI() . ' leads to module: ' . $strModuleName);
 		}else{
-
-			if(U::isLegacy()){
-				require_once __DIR__ . '/../../legacy/public/index.php';
-//				die();
-			}else{
-
+			if(!U::isLegacy()){
 				$strMsg = 'failed to load phalcon module';
-
-				$oLogger->debug(__CLASS__ . ': ' . $strMsg . ' for "' . $oRequest->getUri() . '"');
-
-//			throw new Exception($strMsg);
+			}else{
+				$strMsg = 'loading old backend';
 			}
+			$oLogger->debug(__CLASS__ . ': ' . $strMsg . ' for "' . $oRequest->getUri() . '"');
 		}
 
 		return $boolReturn;

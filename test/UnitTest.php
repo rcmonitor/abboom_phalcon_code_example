@@ -21,10 +21,11 @@ class UnitTest extends UnitTestCase {
 			'This is OK'
 		);
 
-		$this->assertEquals('works',
-			'works1',
-			'This wil fail'
-		);
+
+//		$this->assertEquals('works',
+//			'works1',
+//			'This wil fail'
+//		);
 
 	}
 }

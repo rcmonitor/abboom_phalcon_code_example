@@ -1,8 +1,10 @@
 <?php
+use Phalcon\Config;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
 use Phalcon\Loader;
 use Phalcon\Logger\Adapter\File;
+use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Router;
 
 /**
@@ -15,8 +17,11 @@ use Phalcon\Mvc\Router;
  * @method Loader getLoader() getLoader() returns class loader;
  * @method Router getRouter() getRouter() returns router;
  * @method Request getRequest() getRequest() returns http request object;
+ * @method Dispatcher getDispatcher() getDispatcher() returns dispatcher object;
+ * @method Config getConfig() getConfig() returns configuration object;
  *
  */
 class DiCustom extends FactoryDefault{
 
 }
+

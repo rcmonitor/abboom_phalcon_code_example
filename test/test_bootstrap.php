@@ -7,6 +7,8 @@
  */
 
 
+require __DIR__ . '/../var/config/DiCustom.php';
+
 //define('TEST_ROOT_PATH', __DIR__);
 //define('APP_ROOT_PATH', __DIR__ . '/../');
 
@@ -15,31 +17,43 @@
 //);
 
 
+use Phalcon\Di;
+
 require_once __DIR__ . '/../vendor/autoload.php';
+
+$di = new DiCustom();
+Di::reset();
+
+Di::setDefault($di);
+
 /**
  * Read the configuration
  */
-$config = include __DIR__ . "/../var/config/config.php";
+$oConfig = include __DIR__ . "/../var/config/config.php";
+
+$di->setShared('config', $oConfig);
+
+//$oConfig = $di->getConfig();
 
 
 $eventsManager = new \Phalcon\Events\Manager();
 $loader = new \Phalcon\Loader();
 
-$eventsManager->attach('loader', function($event, $loader) {
-	/**
-	 * @type \Phalcon\Events\Event $event
-	 * @type \Phalcon\Loader $loader
-	 */
-	if ($event->getType() == 'beforeCheckPath') {
-		echo 'trying: ' . $loader->getCheckedPath() . PHP_EOL;
-	}elseif($event->getType() == 'pathFound'){
-		echo 'gotcha: ' . $loader->getCheckedPath();
-	}elseif($event->getType() == 'afterCheckPath'){
-		echo 'not found: ' . $loader->getCheckedPath() . PHP_EOL;
-	}
-});
-
-$loader->setEventsManager($eventsManager);
+//$eventsManager->attach('loader', function($event, $loader) {
+//	/**
+//	 * @type \Phalcon\Events\Event $event
+//	 * @type \Phalcon\Loader $loader
+//	 */
+//	if ($event->getType() == 'beforeCheckPath') {
+//		echo 'trying: ' . $loader->getCheckedPath() . PHP_EOL;
+//	}elseif($event->getType() == 'pathFound'){
+//		echo 'gotcha: ' . $loader->getCheckedPath();
+//	}elseif($event->getType() == 'afterCheckPath'){
+//		echo 'not found: ' . $loader->getCheckedPath() . PHP_EOL;
+//	}
+//});
+//
+//$loader->setEventsManager($eventsManager);
 
 $loader->registerNamespaces(array(
 	'Test' => __DIR__,
@@ -50,13 +64,14 @@ $loader->registerNamespaces(array(
  */
 $loader->registerDirs(
 	array(
-		$config->application->controllersDir,
-		$config->application->modelsDir,
-		$config->application->preControllersDir,
-		$config->application->testDir,
+		$oConfig->application->controllersDir,
+		$oConfig->application->modelsDir,
+		$oConfig->application->preControllersDir,
+		$oConfig->application->testDir,
 	)
 )->register();
 
+$di->setShared('loader', $loader);
 
 ///**
 // * Read auto-loader
@@ -67,3 +82,6 @@ $loader->registerDirs(
  * Read services
  */
 include __DIR__ . "/../var/config/services.php";
+
+
+//Di::setDefault($di);

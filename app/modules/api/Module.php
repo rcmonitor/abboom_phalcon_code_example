@@ -9,9 +9,11 @@
 namespace App\Modules\Api;
 
 
-use App\Modules\Api\ApiRoutes;
+//use App\Modules\Api\ApiRoutes;
 use Phalcon\Config;
 use Phalcon\DiInterface;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager;
 use Phalcon\Http\Request;
 use Phalcon\Loader,
 	Phalcon\Mvc\Dispatcher,
@@ -35,12 +37,12 @@ class Module implements ModuleDefinitionInterface {
 	public function registerAutoloaders(DiInterface $di = null)
 	{
 
-		echo __FUNCTION__ . ' executed <br />' . PHP_EOL;
+//		echo __FUNCTION__ . ' executed <br />' . PHP_EOL;
 
 		$loader = $di->getLoader();
 //			new Loader();
 
-		echo __CLASS__ . ':' . __FUNCTION__ . 'executed after getting loader <br />' . PHP_EOL;
+//		echo __CLASS__ . ':' . __FUNCTION__ . ' executed after getting loader <br />' . PHP_EOL;
 
 		$loader->registerNamespaces(
 			array(
@@ -50,12 +52,11 @@ class Module implements ModuleDefinitionInterface {
 			true
 		);
 
-		echo __CLASS__ . ':' . __FUNCTION__ . 'executed after registering namespaces <br />' . PHP_EOL;
+//		echo __CLASS__ . ':' . __FUNCTION__ . ' executed after registering namespaces <br />' . PHP_EOL;
 
 		$oLogger = $di->getFileLogger();
 		$oLogger->debug('api loader: namespaces registered: ' . print_r($loader->getNamespaces(), true));
 
-//		$loader->register();
 	}
 
 	/**
@@ -63,40 +64,83 @@ class Module implements ModuleDefinitionInterface {
 	 *
 	 * @param \DiCustom $di
 	 */
-	public function registerServices(DiInterface $di)
-	{
+	public function registerServices(DiInterface $di){
 
-		echo __FUNCTION__ . ' executed <br />' . PHP_EOL;
-
-		/**
-		 * @type $oRequest Request
-		 */
-		$oRequest = $di->getRequest();
-
-//		/**
-//		 * @type $oRouter Router
-//		 */
-//		$oRouter = $di->getRouter();
-
-		/**
-		 * @type File $oLogger
-		 */
 		$oLogger = $di->getFileLogger();
 
-//		$oRouter->add()
+		$oRouter = new Router(false);
 
-//		$oApiRoutes = new ApiRoutes();
-		$oRouter = new Router();
 		$di->set('router', $oRouter);
 		$oRouter->mount(new ApiRoutes($di));
 
+//		$oApiDispatcherEventsManager = new Manager();
+////		$oLogger = $di->getFileLogger();
+//		$oRouter = $di->getRouter();
+//
+//		$oLogger->debug('api module ' . __FUNCTION__ . ': setting up dispatcher');
+//
+//		$oApiDispatcherEventsManager->attach('dispatch', function(Event $event, Dispatcher $dispatcher, $data) use($oLogger, $oRouter){
+//			$oLogger->debug('api dispatcher: ' . $event->getType() . ': ' . print_r($oRouter->getMatchedRoute(), true));
+//		});
+//
+//
+//		$oDispatcher = $di->getDispatcher();
+//		$oDispatcher->setDefaultNamespace('App\Modules\Api\Web');
+//		$oDispatcher->setControllerSuffix('Homorrag');
+//		$oDispatcher->setEventsManager($oApiDispatcherEventsManager);
 
-		// Регистрация диспетчера
-		$di->set('dispatcher', function() {
+
+
+
+		$di->set('dispatcher', function() use($di){
 			$dispatcher = new Dispatcher();
+			$oApiDispatcherEventsManager = new Manager();
+			$oLogger = $di->getFileLogger();
+			$oRouter = $di->getRouter();
+			$oRequest = $di->getRequest();
+
+			$oLogger->debug('api module ' . __FUNCTION__ . ': setting up dispatcher');
+
+			$oApiDispatcherEventsManager->attach('dispatch', function(Event $event, Dispatcher $dispatcher, $data) use($oLogger, $oRouter, $oRequest){
+
+				if($event->getType() == 'beforeDispatchLoop'){
+
+					$arRoutes = $oRouter->getRoutes();
+
+					foreach ($arRoutes as $oRoute) {
+						$oRoute->beforeMatch(function($uri, $route) use ($oLogger){
+							$oLogger->debug('__ api module dispatcher route beforeMatch: ' . $uri . $route);
+
+						});
+						$oLogger->debug('api module dispatcher: ' . $event->getType() . ': route registered: ' . $oRoute->getCompiledPattern());
+
+						$regPattern = $oRoute->getCompiledPattern();
+
+						$strUri = $oRequest->getURI();
+
+						if(preg_match($regPattern, $strUri)){
+							$oLogger->debug('"' . $strUri . '" matched ' . $regPattern);
+						}else{
+							$oLogger->debug('"' . $strUri . '" mismatched ' . $regPattern);
+						}
+
+					}
+
+				}
+
+				$oLogger->debug('api dispatcher: ' . $event->getType() . ': route matched: ' . print_r($oRouter->getMatchedRoute(), true));
+				$oLogger->debug('api dispatcher: ' . $event->getType()
+					. ' module "' . $oRouter->getModuleName()
+					. '" controller: "' . $oRouter->getControllerName()
+					. '" action: "' . $oRouter->getActionName() . '"'
+				);
+			});
+
+			$dispatcher->setEventsManager($oApiDispatcherEventsManager);
 			$dispatcher->setDefaultNamespace('App\Modules\Api\Web');
 			return $dispatcher;
 		});
+
 
 
 //		$oConfig = new Config(array(

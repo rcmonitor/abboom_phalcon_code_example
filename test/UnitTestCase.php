@@ -39,15 +39,30 @@ abstract class UnitTestCase extends PhalconTestCase {
 		parent::setUp($di);
 
 		$this->_loaded = true;
+
+//		echo 'loaded: ';
+//		var_dump($this->_loaded);
 	}
 
 	/**
 	 * Проверка на то, что тест правильно настроен
 	 * @throws \PHPUnit_Framework_IncompleteTestError;
 	 */
-	public function __destruct() {
-		if(!$this->_loaded) {
-			throw new \PHPUnit_Framework_IncompleteTestError('Please run parent::setUp().');
-		}
-	}
+//	public function __destruct() {
+//		if(!$this->_loaded) {
+//			throw new \PHPUnit_Framework_IncompleteTestError('Please run parent::setUp()');
+//		}
+//	}
+
+
+//	public function tearDown() {
+//
+//		Di::reset();
+//
+//		parent::tearDown();
+//
+////		if(!$this->_loaded) {
+////			throw new \PHPUnit_Framework_IncompleteTestError('Please run parent::setUp()');
+////		}
+//	}
 }
