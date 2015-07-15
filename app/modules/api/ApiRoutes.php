@@ -34,6 +34,7 @@ class ApiRoutes extends Group{
 		$this->setPrefix('/api');
 
 		$this->add('/{media}/v{major:[0-9]{1,2}}\.{minor:[0-9]{1,2}}/:controller/:action/:int', array(
+			'namespace' => 'App\Modules\Api\Web\Controllers',
 			'controller' => 4,
 			'action' => 5,
 			'id' => 6

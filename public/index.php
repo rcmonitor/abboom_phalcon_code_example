@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../var/config/DiCustom.php';
+require __DIR__ . '/AppRoute.php';
 
 use App\Hooks\ModuleRouter;
 use Phalcon\Debug;
@@ -34,6 +35,8 @@ try {
 	 */
 	include __DIR__ . "/../var/config/services.php";
 
+	include __DIR__ . '/../var/config/routes.php';
+
 	$oLogger = $di->getFileLogger();
 
 	$strVendorLoaderPath = $oConfig->application->libraryDir . '/autoload.php';
@@ -44,7 +47,7 @@ try {
 	/**
 	 * Handle the request
 	 */
-	$application = new \Phalcon\Mvc\Application($di);
+	$application = new Application($di);
 
 	$application->setEventsManager($oAppEventsManager);
 
@@ -52,7 +55,10 @@ try {
 		$oLogger->debug('application: ' . $event->getType());
 	});
 
-	$arNamespaces = $di->getLoader()->getNamespaces();
+
+//	$application->registerModules();
+
+//	$arNamespaces = $di->getLoader()->getNamespaces();
 
 	/**
 	 * here's all the magic with modules
@@ -63,6 +69,9 @@ try {
 
 		$oLogger->debug('app modules registered: ' . print_r($application->getModules(), true));
 		$oLogger->debug('app default module: "' . $application->getDefaultModule() . '"');
+
+//		$oRouter = new AppRoute();
+//		$di->set('router', $oRouter);
 
 		echo $application->handle()->getContent();
 	}else{

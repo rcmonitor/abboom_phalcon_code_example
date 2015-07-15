@@ -1,4 +1,5 @@
 <?php
+use App\Modules\Api\VersionLoader;
 use Phalcon\Config;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
@@ -19,9 +20,11 @@ use Phalcon\Mvc\Router;
  * @method Request getRequest() getRequest() returns http request object;
  * @method Dispatcher getDispatcher() getDispatcher() returns dispatcher object;
  * @method Config getConfig() getConfig() returns configuration object;
+ * @method VersionLoader getVersionLoader() getVersionLoader() returns version loader;
  *
  */
 class DiCustom extends FactoryDefault{
 
 }
+
 

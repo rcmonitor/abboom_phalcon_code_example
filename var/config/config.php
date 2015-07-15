@@ -25,10 +25,15 @@ return new \Phalcon\Config(array(
 		'modulesDir' => __DIR__ . '/../../app/modules',
 		'hooksDir' => __DIR__ . '/../../app/hooks',
 		'utilDir' => __DIR__ . '/../../app/util',
+		'coreDir' => __DIR__ . '/../../app/core',
 	),
 	'environment' => array(
 		'legacy' => true,
 		'development' => true,
+	),
+	'modules' => array(
+		'Api' => 'api',
+		'Regular' => 'regular',
 	),
 ));
 
