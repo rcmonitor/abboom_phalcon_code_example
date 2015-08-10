@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 28.05.15
  * Time: 18:33
  */
@@ -9,6 +9,8 @@
 namespace Test;
 
 
+use App\Util\HC;
+use App\Util\Tester;
 use Phalcon\DI,
 	\Phalcon\Test\UnitTestCase as PhalconTestCase;
 
@@ -28,32 +30,44 @@ abstract class UnitTestCase extends PhalconTestCase {
 	 * @var bool
 	 */
 	private $_loaded = false;
+	/**
+	 * @var bool
+	 */
+	private $_provider = false;
+
+
+	public static function setUpBeforeClass(){
+		require 'test_bootstrap.php';
+
+		parent::setUpBeforeClass();
+
+	}
 
 	public function setUp(Phalcon\DiInterface $di = NULL, Phalcon\Config $config = NULL) {
 
-		// Загрузка дополнительных сервисов, которые могут потребоваться во время тестирования
 		$di = DI::getDefault();
-
-		// получаем любые компоненты DI, если у вас есть настройки, не забудьте передать их родителю
 
 		parent::setUp($di);
 
 		$this->_loaded = true;
 
-//		echo 'loaded: ';
-//		var_dump($this->_loaded);
 	}
 
 	/**
 	 * Проверка на то, что тест правильно настроен
 	 * @throws \PHPUnit_Framework_IncompleteTestError;
 	 */
-//	public function __destruct() {
-//		if(!$this->_loaded) {
-//			throw new \PHPUnit_Framework_IncompleteTestError('Please run parent::setUp()');
-//		}
-//	}
+	public function __destruct() {
 
+		if(!$this->_loaded && !$this->_provider) {
+			throw new \PHPUnit_Framework_IncompleteTestError('Please run parent::setUp()');
+		}
+	}
+
+
+	protected function isProvider(){
+		$this->_provider = true;
+	}
 
 //	public function tearDown() {
 //

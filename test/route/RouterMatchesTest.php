@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 29.06.15
  * Time: 16:08
  */
@@ -127,6 +127,9 @@ class RouterMatchesTest extends UnitTestCase{
 
 
 	public function easyMatchedProvider(){
+
+		$this->isProvider();
+
 		$arRoutes = require __DIR__ . '/../fixtures/routes.php';
 
 		return $arRoutes['test']['match'];
@@ -134,6 +137,9 @@ class RouterMatchesTest extends UnitTestCase{
 
 
 	public function easyMismatchedProvider(){
+
+		$this->isProvider();
+
 		$arRoutes = require __DIR__ . '/../fixtures/routes.php';
 
 		return $arRoutes['test']['mismatch'];

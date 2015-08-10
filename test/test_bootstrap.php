@@ -1,13 +1,13 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 20.05.15
  * Time: 11:16
  */
 
 
-require __DIR__ . '/../var/config/DiCustom.php';
+require_once __DIR__ . '/../var/config/DiCustom.php';
 
 //define('TEST_ROOT_PATH', __DIR__);
 //define('APP_ROOT_PATH', __DIR__ . '/../');
@@ -17,12 +17,13 @@ require __DIR__ . '/../var/config/DiCustom.php';
 //);
 
 
+use App\Util\HC;
 use Phalcon\Di;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $di = new DiCustom();
-Di::reset();
+//Di::reset();
 
 Di::setDefault($di);
 
@@ -57,6 +58,8 @@ $loader = new \Phalcon\Loader();
 
 $loader->registerNamespaces(array(
 	'Test' => __DIR__,
+	'App\Util' => $oConfig->application->utilDir,
+	'App\Core\Interfaces' => $oConfig->application->ifaceDir,
 ));
 
 /**
@@ -83,5 +86,3 @@ $di->setShared('loader', $loader);
  */
 include __DIR__ . "/../var/config/services.php";
 
-
-//Di::setDefault($di);

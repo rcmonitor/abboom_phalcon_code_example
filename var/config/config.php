@@ -26,6 +26,7 @@ return new \Phalcon\Config(array(
 		'hooksDir' => __DIR__ . '/../../app/hooks',
 		'utilDir' => __DIR__ . '/../../app/util',
 		'coreDir' => __DIR__ . '/../../app/core',
+		'ifaceDir' => __DIR__ . '/../../app/core/interfaces',
 	),
 	'environment' => array(
 		'legacy' => true,

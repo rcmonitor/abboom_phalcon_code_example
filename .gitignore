@@ -4,3 +4,5 @@ composer.lock
 vendor
 var/cache
 var/log
+legacy
+public

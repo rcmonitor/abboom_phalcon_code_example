@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 29.05.15
  * Time: 16:44
  */
@@ -10,6 +10,8 @@ namespace App\Modules\Api;
 
 
 //use App\Modules\Api\ApiRoutes;
+use App\Util\HC;
+use App\Util\Tester;
 use Phalcon\Config;
 use Phalcon\Di;
 use Phalcon\DiInterface;
@@ -47,7 +49,7 @@ class Module implements ModuleDefinitionInterface {
 
 		$loader->registerNamespaces(
 			array(
-				'App\Modules\Api\Controllers' => __DIR__ . '/controllers/',
+//				'App\Modules\Api\Controllers' => __DIR__ . '/controllers/',
 				'App\Modules\Api' => __DIR__,
 			),
 			true
@@ -73,7 +75,14 @@ class Module implements ModuleDefinitionInterface {
 
 		$oRouter = new CustomRouter(false);
 
+//		$oOldRouter = $di->getRouter();
+
+//		Tester::ec('old router: ' . HC::className($oOldRouter));
+
 		$di->set('router', $oRouter);
+
+//		Tester::ec('new router set: ' . HC::className($di->getRouter()));
+
 		$oRouter->mount(new ApiRoutes($di));
 
 
@@ -100,7 +109,7 @@ class Module implements ModuleDefinitionInterface {
 
 		$oDispatcher = new Dispatcher();
 		$oApiDispatcherEventsManager = new Manager();
-		$oApiDispatcherEventsManager->attach('dispatch:beforeDispatch', function(Event $oEvent, Dispatcher $oDispatcher, $data){
+		$oApiDispatcherEventsManager->attach('dispatch:beforeDispatchLoop', function(Event $oEvent, Dispatcher $oDispatcher, $data){
 			/**
 			 * @type \DiCustom $di
 			 */

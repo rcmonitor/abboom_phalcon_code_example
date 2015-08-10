@@ -4,7 +4,7 @@ use Phalcon\Mvc\Router;
 
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 30.06.15
  * Time: 18:43
  */

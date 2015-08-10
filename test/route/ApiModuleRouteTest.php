@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 19.06.15
  * Time: 18:07
  */
@@ -10,6 +10,8 @@ namespace Test\Route;
 
 
 use App\Modules\Api\ApiRoutes;
+use App\Util\HC;
+use App\Util\Tester;
 use Phalcon\Di;
 use Phalcon\Mvc\Router;
 use Test\UnitTestCase;
@@ -56,7 +58,6 @@ class ApiModuleRouteTest extends UnitTestCase{
 
 		$this->router = $di->getRouter();
 
-
 		$this->router->mount(new ApiRoutes());
 
 		$this->setExistingRoutes();
@@ -76,6 +77,7 @@ class ApiModuleRouteTest extends UnitTestCase{
 
 	/**
 	 * @covers initialize
+	 *
 	 *
 	 * @dataProvider easyMatchRoutesDataProvider
 	 */
@@ -122,6 +124,8 @@ class ApiModuleRouteTest extends UnitTestCase{
 
 	public function easyMatchRoutesDataProvider(){
 
+		$this->isProvider();
+
 		$arRoutes = require __DIR__ . '/../fixtures/routes.php';
 
 		return $arRoutes['api']['match'];
@@ -129,6 +133,7 @@ class ApiModuleRouteTest extends UnitTestCase{
 
 
 	public function easyMismatchRoutesDataProvider(){
+		$this->isProvider();
 		$arRoutes = require __DIR__ . '/../fixtures/routes.php';
 
 		return $arRoutes['api']['mismatch'];

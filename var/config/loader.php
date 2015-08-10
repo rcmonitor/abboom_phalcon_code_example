@@ -18,7 +18,7 @@ $di->setShared('loader', function() use ($oEventsManager, $di){
 		'App\Modules' => $oConfig->application->modulesDir,
 		'App\Hooks' => $oConfig->application->hooksDir,
 		'App\Util' => $oConfig->application->utilDir,
-		'App\Core\Interfaces' => $oConfig->application->coreDir . '/interfaces',
+		'App\Core\Interfaces' => $oConfig->application->ifaceDir,
 		'App\Modules\Api' => __DIR__ . '/../../app/modules/api',
 	));
 

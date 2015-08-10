@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 30.06.15
  * Time: 15:10
  */
@@ -10,6 +10,7 @@ namespace App\Modules\Api;
 
 
 use App\Core\Interfaces\ILoader;
+use App\Util\Tester;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Dispatcher;
@@ -69,6 +70,8 @@ class VersionLoader implements InjectionAwareInterface, ILoader{
 			$oLogger->debug($strContext . ' got path: ' . $strPath);
 
 			$oLoader = $this->_di->getLoader();
+
+			$oLogger->debug(Tester::ec("'" . $this->dispatcher->getNamespaceName() . "'", true));
 
 			$arRequiredNamespace = array(
 				$this->dispatcher->getNamespaceName() => $strPath
@@ -135,9 +138,11 @@ class VersionLoader implements InjectionAwareInterface, ILoader{
 		$intMinorVersion = (integer) $intMinorVersion;
 
 		for ($i = $intMinorVersion; $i >= 0; $i --){
-			$strDir = $strBaseDir . $intMinorVersion . '/controllers';
+			$strDir = $strBaseDir . $intMinorVersion . DIRECTORY_SEPARATOR . 'controllers';
 
-			if(Checker::methodExists($strDir, $this->dispatcher->getControllerClass(), $this->dispatcher->getActiveMethod())){
+			$oChecker = new Checker($strDir, $this->dispatcher->getControllerClass());
+
+			if($oChecker->methodExists($this->dispatcher->getActiveMethod())){
 				$oLogger->debug(__CLASS__ . '->' . __FUNCTION__ . ':: '
 								. $this->dispatcher->getControllerClass() . '->'
 								. $this->dispatcher->getActiveMethod()

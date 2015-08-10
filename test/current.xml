@@ -29,9 +29,11 @@
 	</groups>
 	<testsuites>
 		<testsuite name="First test suite">
-			<directory>./dispatcher</directory>
-			<!--<file>/path/to/MyTest.php</file>-->
-			<!--<exclude>/var/www/abboom2/test/route/RouterMatchesTest.php</exclude>-->
+			<!--<directory>./dispatcher</directory>-->
+			<!--<directory>./route</directory>-->
+			<directory>./loader</directory>
+			<!--<file>./route/ApiModuleRouteTest.php</file>-->
+			<!--<exclude>./route/ApiModuleRouteTest.php</exclude>-->
 			<!--<exclude>/var/www/abboom2/test/UnitTest.php</exclude>-->
 		</testsuite>
 	</testsuites>

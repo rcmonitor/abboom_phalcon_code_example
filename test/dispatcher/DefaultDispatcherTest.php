@@ -1,4 +1,5 @@
 <?php
+use App\Util\HC;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
@@ -7,7 +8,7 @@ use Phalcon\Test\UnitTestCase;
 
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 07.07.15
  * Time: 11:42
  */
@@ -75,15 +76,6 @@ class DefaultDispatcherTest extends UnitTestCase{
 
 		$oDispatcherEventManager = new Manager();
 		$oDispatcherEventManager->attach('dispatch:beforeDispatch', function(Event $oEvent, Dispatcher $oDispatcher, $data){
-
-//			echo $oDispatcher->getC
-
-//			echo 'dispatcher beforeDispatch';
-
-
-//			$strClassName = $oDispatcher->getControllerClass();
-//
-//			$this->assertEquals()
 
 			return false;
 		});

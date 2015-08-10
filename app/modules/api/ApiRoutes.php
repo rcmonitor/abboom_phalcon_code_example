@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tkorzhikov
+ * User: rcmonitor
  * Date: 01.06.15
  * Time: 16:49
  */
@@ -18,10 +18,10 @@ use Phalcon\Mvc\Router\Route;
 class ApiRoutes extends Group{
 
 
-	/**
-	 * @var \DiCustom
-	 */
-	private $di;
+//	/**
+//	 * @var \DiCustom
+//	 */
+//	private $di;
 
 
 
